@@ -1,0 +1,33 @@
+<h3>Враги</h3>
+
+<table class='table table-bordered table-hovered'>
+	<tr>
+		<th rowspan='2'>№</th>
+		<th rowspan='2'>карта</th>
+		<th rowspan='2'>speed</th>
+		<th rowspan='2'>hp</th>
+		<th rowspan='2'>mp</th>
+		<th colspan='2'>Позиция</th>
+		<th rowspan='2'>Префаб</th>
+		<th rowspan='2'>действие</th>
+		<th rowspan='2'>PID</th>
+	</tr>
+	<tr>
+		<th>x</th>
+		<th>y</th>
+	</tr>	
+	{foreach $enemys as $enemy}
+		<tr>
+			<td>{$enemy.id}</td>
+			<td>{$enemy.map_id}</td>
+			<td>{$enemy.speed}</td>
+			<td>{$enemy.hp}</td>
+			<td>{$enemy.mp}</td>
+			<td>{$enemy.position.0}</td>
+			<td>{$enemy.position.1}</td>
+			<td>{$enemy.prefab}</td>
+			<td>{$enemy.action}</td>
+			<td>{$enemy.PID}</td>
+		</tr>		
+	{/foreach}
+</table>

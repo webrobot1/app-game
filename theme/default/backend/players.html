@@ -1,0 +1,47 @@
+<h3>Игроки</h3>
+
+<table class='table table-bordered table-hovered'>
+	<tr>
+		<th rowspan='2'>№</th>
+		<th rowspan='2'>логин</th>
+		<th rowspan='2'>токен</th>
+		<th rowspan='2'>IP</th>
+		<th rowspan='2'>Ping</th>
+		<th rowspan='2'>карта</th>
+		<th rowspan='2'>speed</th>
+		<th rowspan='2'>hp</th>
+		<th rowspan='2'>mp</th>
+		<th colspan='2'>Позиция</th>
+		<th rowspan='2'>Префаб</th>
+		<th rowspan='2'>действие</th>
+		<th rowspan='2'>Активность</th>
+		<th rowspan='2'>Скриншет</th>
+	</tr>
+	<tr>
+		<th>x</th>
+		<th>y</th>
+	</tr>	
+	{foreach $players as $player}
+		<tr>
+			<td>{$player.id}</td>
+			<td>{$player.login}</td>
+			<td>{$player.token}</td>
+			<td>{$player.ip}</td>
+			<td>{$player.ping}</td>
+			<td>{$player.map_id}</td>
+			<td>{$player.speed}</td>
+			<td>{$player.hp}</td>
+			<td>{$player.mp}</td>
+			<td>{$player.position.0}</td>
+			<td>{$player.position.1}</td>
+			<td>{$player.prefab}</td>
+			<td>{$player.action}</td>
+			<td>
+				{$player.datetime}
+			</td>		
+			<td>
+				{if !empty($player.screen)}<a target='_blank' class='minimized' href='{$player.screen}'><img height='50px' src='{$player.screen}' /></a>{/if}
+			</td>
+		</tr>		
+	{/foreach}
+</table>
