@@ -9,5 +9,5 @@
 :white_check_mark:    Авторизацию - регистрацию по API из клиента    
 :white_check_mark:    Загрузку игрового мира по Api в клиент (команда api/load)    
 :black_square_button: Добавление анимации npc (move, hit и тп)      
-:black_square_button: Добавление классов персонажей    
-:black_square_button: Предметы игрового мира с их спрайтами    
+:black_square_button: Добавление анимаций персонажей    
+:black_square_button: Предметы игрового мира с их спрайтами , характеристиками   
