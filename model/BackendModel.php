@@ -1,6 +1,5 @@
 <?php
 namespace Edisom\App\game\model;
-DEFINE("SPEED", 0.5);
 
 class BackendModel extends \Edisom\Core\Model
 {		
