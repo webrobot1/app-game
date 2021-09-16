@@ -1,0 +1,5 @@
+{
+	"require": {
+		"jmgq/a-star": "1.2.0"
+    }
+}
