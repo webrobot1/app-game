@@ -2,12 +2,12 @@
 
 Возможности
 
-:white_check_mark:    Расчет координат при движении персонажа (отправка команд со стороны клиента move/up , move/down и тп выдает в ответ координаты)  
-:white_check_mark:    Просмотр данных игроков 
-:white_check_mark:    Снятие, хранение и просмотр скриншетов игрового мира с экранов игроков
-:white_check_mark:    Просмотр данных Npc
-:white_check_mark:    Авторизацию - регистрацию по API из клиента
-:white_check_mark:    Загрузку игрового мира по Api в клиент (команда api/load)  
-:black_square_button: Добавление анимации npc (move, hit и тп)     
-:black_square_button: Добавление классов персонажей 
+:white_check_mark:    Расчет координат при движении персонажа (отправка команд со стороны клиента move/up , move/down и тп выдает в ответ координаты)    
+:white_check_mark:    Просмотр данных игроков    
+:white_check_mark:    Снятие, хранение и просмотр скриншетов игрового мира с экранов игроков    
+:white_check_mark:    Просмотр данных Npc    
+:white_check_mark:    Авторизацию - регистрацию по API из клиента    
+:white_check_mark:    Загрузку игрового мира по Api в клиент (команда api/load)    
+:black_square_button: Добавление анимации npc (move, hit и тп)      
+:black_square_button: Добавление классов персонажей    
 :black_square_button: Предметы игрового мира с их спрайтами    
