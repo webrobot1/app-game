@@ -45,11 +45,11 @@ class ApiController extends \Edisom\Core\Api
 		// добавим себя на на карту
 		if($self = end($this->model->get('players', ['id'=>$this->model->player['id']])))
 		{	
-			if(!$this->model::redis()->geoAdd('map:'.$self['map_id'], $self['position'][0], $self['position'][1], $self['token']))
+			if(!$this->model::redis()->geoAdd('map:'.$this->model->player['map_id'], $self['position'][0], $self['position'][1], $self['token']))
 				throw new \Exception('Ошибка добавления на карту');	
 			
 			// добавим всем на карту себя (себе тоже)
-			$this->model::redis()->publish('map:'.$self['map_id'], json_encode(['players'=>[ $self ]],JSON_NUMERIC_CHECK));			
+			$this->model::redis()->publish('map:'.$this->model->player['map_id'], json_encode(['players'=>[ $self ]],JSON_NUMERIC_CHECK));			
 		}
 		else
 			throw new \Exception('не найден игрок');
