@@ -23,7 +23,7 @@ class MoveController extends ApiController
 		
 		// сообщим всем на карте что мы двинулись
 		$this->model::redis()->publish('map:'.$this->model->player['map_id'], json_encode(['players'=>[['id'=>$this->model->player['id'], 'action'=>$this->model->player['action'], 'position'=>$this->position]]],JSON_NUMERIC_CHECK));		
-		exit();
+		exit((new \DateTime())->format("Y-m-d H:i:s:v"));
 	}
 	
 	
