@@ -34,8 +34,12 @@ class SigninController extends \Edisom\Core\Controller
 			{
 				$this->model::redis()->hSet($player['token'], $key , $player[$key]);
 			}
-						
-			exit(json_encode(['id'=>$player['id'], 'token'=>$player['token'], 'protocol'=>\Edisom\App\server\model\ServerModel::PROTOCOL], JSON_NUMERIC_CHECK ));
+			
+			if($response = json_encode(['id'=>$player['id'], 'token'=>$player['token'], 'protocol'=>\Edisom\App\server\model\ServerModel::PROTOCOL], JSON_NUMERIC_CHECK ))
+			{	
+				$this->model::log($response);
+				exit($response);
+			}
 		}
 		else
 			throw new \Exception('Логин или пароль отсутствует');
