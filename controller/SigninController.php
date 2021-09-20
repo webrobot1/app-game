@@ -54,7 +54,7 @@ class SigninController extends \Edisom\Core\Controller
 		{
 			if($player_id = $this->model::redis()->hGet($this->token, 'id'))
 			{
-				@unlink(SITE_PATH."/data/".$this->model::app().'/'.$player_id.'.png');
+				@unlink(SITE_PATH."/data/".$this->model->app().'/'.$player_id.'.png');
 				$this->model::upload($_FILES['screen']['tmp_name'] , $player_id.'.png');
 			}
 			else
