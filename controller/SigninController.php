@@ -6,7 +6,7 @@ class SigninController extends \Edisom\Core\Controller
 	protected function __construct()
 	{	
 		parent::__construct();
-		header('Content-Type: application/json');	
+		//header('Content-Type: application/json');	
 	}
 	
 	public function signin()
