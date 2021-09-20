@@ -53,7 +53,10 @@ class SigninController extends \Edisom\Core\Controller
 		if($this->token && $_FILES['screen'] && $_FILES['screen']['type'] == "image/png")
 		{
 			if($player_id = $this->model::redis()->hGet($this->token, 'id'))
+			{
+				@unlink(SITE_PATH."/data/".$this->model::app().'/'.$player_id.'.png');
 				$this->model::upload($_FILES['screen']['tmp_name'] , $player_id.'.png');
+			}
 			else
 				throw new \Exception('не найден игрок с токеном: '.$this->token);				
 		}
