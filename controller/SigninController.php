@@ -6,7 +6,9 @@ class SigninController extends \Edisom\Core\Controller
 	protected function __construct()
 	{	
 		parent::__construct();
-		header('Content-Type: application/json');	
+		header('Content-Type: application/json');
+
+		// без этого заголовка Unity не примет пакет		
 		header('Access-Control-Allow-Origin: *');	
 	}
 	
