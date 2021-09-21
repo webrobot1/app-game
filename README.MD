@@ -8,6 +8,7 @@
 :white_check_mark:    Просмотр данных Npc    
 :white_check_mark:    Авторизацию - регистрацию по API из клиента    
 :white_check_mark:    Загрузку игрового мира по Api в клиент (команда api/load)    
+:white_check_mark:    Браузерная версия игры по технологии [WebGl](http://95.216.204.181:8080/data/game/index.html)    
 :black_square_button: Добавление анимации npc (move, hit и тп)      
 :black_square_button: Добавление анимаций персонажей    
 :black_square_button: Предметы игрового мира с их спрайтами , характеристиками   
