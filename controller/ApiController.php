@@ -54,10 +54,10 @@ class ApiController extends \Edisom\Core\Api
 		else
 			throw new \Exception('не найден игрок');
 		
-	 	//ob_start(); 
-			//imagepng((new \Edisom\App\map\model\Tiled\GD\Map($this->model->player['map_id']))->load()->resource);
-			//$return['map']['data'] = base64_encode(ob_get_contents());
-		//ob_end_clean (); 
+	 	ob_start(); 
+			imagepng((new \Edisom\App\map\model\Tiled\GD\Map($this->model->player['map_id']))->load()->resource);
+			$return['map']['data'] = base64_encode(ob_get_contents());
+		ob_end_clean (); 
 		
 		if($return)
 			exit(json_encode($return, JSON_NUMERIC_CHECK));

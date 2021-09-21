@@ -10,7 +10,7 @@ class MoveController extends ApiController
 		parent::__construct();
 		$this->position = $this->model::redis()->geoPos('map:'.$this->model->player['map_id'], $this->token)[0];
 		
-		static::redis()->hSet($this->token, 'action', $this->action);	
+		$this->model::redis()->hSet($this->token, 'action', $this->action);	
 							
 		if(\Edisom\App\server\model\ServerModel::PROTOCOL == 'Udp')
 			DEFINE("SPEED", 0.1);
