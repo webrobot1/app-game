@@ -48,7 +48,8 @@ class SigninController extends \Edisom\Core\Controller
 			throw new \Exception('Логин или пароль отсутствует');
 	}	
 	
-	public function register(){
+	public function register()
+	{
 		if($this->login && $this->password && $this->model->register($this->login, $this->password))
 		{
 			exit('Успешно зарегистрирован');
