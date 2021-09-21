@@ -65,11 +65,13 @@ class ApiController extends \Edisom\Core\Api
 	
 	public function save()
 	{	
-		$data = $this->model->player;
-		if($position = $this->model::redis()->geoPos('map:'.$this->model->player['map_id'], $this->token)[0]){
-			$data['position_x'] = round($position[0], 2);
-			$data['position_y'] = round($position[1], 2);
-		}
-		$this->model->update('players', $this->model->player['id'], $data);		
+		if($data = $this->model->player)
+		{
+			if($position = $this->model::redis()->geoPos('map:'.$this->model->player['map_id'], $this->token)[0]){
+				$data['position_x'] = round($position[0], 2);
+				$data['position_y'] = round($position[1], 2);
+			}
+			$this->model->update('players', $this->model->player['id'], $data);	
+		}		
 	}	
 }
