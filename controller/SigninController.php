@@ -40,7 +40,7 @@ class SigninController extends \Edisom\Core\Controller
 			
 			if($response = json_encode(['id'=>$player['id'], 'token'=>$player['token'], 'protocol'=>\Edisom\App\server\model\ServerModel::PROTOCOL], JSON_NUMERIC_CHECK ))
 			{	
-				$this->model::log('Отправили игроку '.$response);
+				$this->model::log('Игрок авторезирован '.$response);
 				exit($response);
 			}
 		}

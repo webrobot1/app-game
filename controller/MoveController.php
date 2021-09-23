@@ -22,7 +22,9 @@ class MoveController extends ApiController
 		$this->model::redis()->geoAdd('map:'.$this->model->player['map_id'], $this->position[0], $this->position[1], $this->token);
 		
 		// сообщим всем на карте что мы двинулись
-		$this->model::redis()->publish('map:'.$this->model->player['map_id'], json_encode(['players'=>[['id'=>$this->model->player['id'], 'action'=>$this->model->player['action'], 'position'=>$this->position]]],JSON_NUMERIC_CHECK));		
+		$this->model::redis()->publish('map:'.$this->model->player['map_id'], json_encode(['players'=>[['id'=>$this->model->player['id'], 'action'=>$this->model->player['action'], 'position'=>$this->position]]],JSON_NUMERIC_CHECK));	
+
+		$this->model::log('Движение игрока '.$this->token);		
 		exit();
 	}
 	
