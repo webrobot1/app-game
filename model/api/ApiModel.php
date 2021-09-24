@@ -3,6 +3,7 @@ namespace Edisom\App\game\model;
 
 use api\ApiModel;
 use \Edisom\App\map\model\Tiled\GD\Map;
+use \Edisom\Core\Cli;
 
 class ApiModel extends BackendModel
 {	
@@ -11,7 +12,11 @@ class ApiModel extends BackendModel
 	protected function __construct()
 	{
 		if (PHP_SAPI !== 'cli') 
-			throw new \Exception('Только CLI режим');	
+			throw new \Exception('Только CLI режим');
+		
+		global $argv;
+		
+		$argv[2] = Cli::decode($argv[2]);
 		
 		if(!$argv[2]['token'])
 			throw new \Exception('отсутствует токен');	
