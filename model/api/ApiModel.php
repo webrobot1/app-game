@@ -75,10 +75,10 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 			$return['map']['data'] = base64_encode(ob_get_contents());
 		ob_end_clean (); 
 		
-		if($return)
+		if($return && ($return = json_encode(array_filter($return), JSON_NUMERIC_CHECK)))
 		{
-			static::log('отправляем карту');
-			static::redis()->publish('token:'.$this->player['token'], json_encode(array_filter($return), JSON_NUMERIC_CHECK));
+			static::log('отправляем карту '.$return);
+			static::redis()->publish('token:'.$this->player['token'], $return);
 			static::log('карта отправлена');
 		}
 	}	
