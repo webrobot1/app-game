@@ -12,7 +12,7 @@ class SigninModel extends BackendModel
 		return true;
 	}
 
-	function sigin(string $login, string $password)
+	function signin(string $login, string $password)
 	{
 		if(!$player = end($this->get('players', ['login'=>$login, 'password'=>$password])))
 			throw new \Exception('Логин или пароль не верен');
