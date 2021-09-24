@@ -3,7 +3,7 @@ namespace Edisom\App\game\controller;
 
 class SigninController extends \Edisom\Core\Controller
 {	
-	protected function __construct()
+	function __construct()
 	{	
 		parent::__construct();
 		header('Content-Type: application/json');
