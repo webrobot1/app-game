@@ -77,7 +77,10 @@ class ApiModel extends BackendModel
 		ob_end_clean (); 
 		
 		if($return)
+		{
 			static::redis()->publish('token:'.$this->player['token'], json_encode(array_filter($return), JSON_NUMERIC_CHECK));
+			static::log('отправили авторизацию');
+		}
 	}	
 	
 	public function save()
