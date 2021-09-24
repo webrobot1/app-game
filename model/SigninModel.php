@@ -1,5 +1,5 @@
 <?php
-namespace \Edisom\App\game\model;
+namespace Edisom\App\game\model;
 
 use \Edisom\Core\Model;
 use \Edisom\App\server\model\ServerModel;
@@ -28,7 +28,7 @@ class SigninModel extends BackendModel
 		$player['action'] = 'idle';
 
 		// установим игроку новый токен и дату визита (а то сразу отвалится по таймауту)
-		$this->->update('players', $player['id'], ['token'=>$player['token'], 'action'=>$player['action'], 'datetime'=>date("Y-m-d H:i:s")]);	
+		$this->update('players', $player['id'], ['token'=>$player['token'], 'action'=>$player['action'], 'datetime'=>date("Y-m-d H:i:s")]);	
 		
 		// внесем в глобальную видимость данные числящиеся за токеном (ид и карту. пока ничего больше не надо)
 		foreach(['id', 'map_id'] as $key)
