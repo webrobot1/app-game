@@ -1,9 +1,8 @@
 <?php
-namespace \Edisom\App\game\model\api;
+namespace \Edisom\App\game\model;
 
 use \Edisom\Core\Model;
 use \Edisom\App\server\model\ServerModel;
-use \Edisom\App\game\model\BackendModel;
 
 class SigninModel extends BackendModel
 {	

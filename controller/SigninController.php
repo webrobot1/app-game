@@ -1,5 +1,5 @@
 <?php
-namespace Edisom\App\game\controller\api;
+namespace Edisom\App\game\controller;
 
 class SigninController extends \Edisom\Core\Controller
 {	
