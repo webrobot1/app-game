@@ -77,8 +77,9 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		
 		if($return)
 		{
+			static::log('отправляем карту');
 			static::redis()->publish('token:'.$this->player['token'], json_encode(array_filter($return), JSON_NUMERIC_CHECK));
-			static::log('отправили авторизацию');
+			static::log('карта отправлена');
 		}
 	}	
 	
