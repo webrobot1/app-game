@@ -1,42 +1,45 @@
 <?php
-namespace Edisom\App\game\controller;
+namespace Edisom\App\game\model;
 
-class ApiController extends \Edisom\Core\Controller
+use api\ApiModel;
+use \Edisom\App\map\model\Tiled\GD\Map;
+
+class ApiModel extends BackendModel
 {	
+	protected $player;
+			
 	protected function __construct()
 	{
 		if (PHP_SAPI !== 'cli') 
 			throw new \Exception('Только CLI режим');	
 		
-		global $argv;
-		
-		parent::__construct(json_decode(base64_decode($argv[2]), true));
-
-		if(!$this->token)
+		if(!$argv[2]['token'])
 			throw new \Exception('отсутствует токен');	
 		// сразу соберем из редиса данные об игроке воедино (те что мы записали в SigninController строка 32)
-		elseif(!$this->model->player = $this->model::redis()->hGetAll($this->token))
-			throw new \Exception('Ошибка авторизации');	
-	}	
-	
+		elseif(!$this->player = static::redis()->hGetAll($argv[2]['token']))
+			throw new \Exception('Ошибка авторизации');
+
+		static::log('Пришла команда '.$argv[1]['action'].' от '.$argv[2]['token']);					
+	}
+
 	// переопределим исключения, нам заголовки не нужны а текст не выводим а отправляем по подписке
 	// пусть клиентское приложение решает что с этим делать (рвать коннект или просто выводить ошибку)
-	public function controllerExceptionHandler($ex)
+	public function exceptionHandler($ex)
 	{
-		if($this->token)
-			static::redis()->publish('token:'.$this->token, json_encode(['error'=>$ex->getMessage()]));
+		if($this->player['token'])
+			static::redis()->publish('token:'.$this->player['token'], json_encode(['error'=>$ex->getMessage()]));
 		
-		$this->model->exceptionHandler($ex);
+		parent::exceptionHandler($ex);
 	}
-	
+
 	public function load()
 	{	
 		$return = ['action'=>'load'];
 	
 		// загружаем из БД всех кто на карте
-		if($tokens = $this->model::redis()->zRange('map:'.$this->model->player['map_id'], 0, -1))
+		if($tokens = static::redis()->zRange('map:'.$this->player['map_id'], 0, -1))
 		{
-			if(!$return['players'] = $this->model->get('players', ['token'=>$tokens]))
+			if(!$return['players'] = $this->get('players', ['token'=>$tokens]))
 				throw new \Exception('не найдено игроков по токенам '.print_r($tokens, true));
 				
 			// удалим данные что передавать клиентам не нужно
@@ -46,41 +49,41 @@ class ApiController extends \Edisom\Core\Controller
 		}
 				
 		// данные что мы вышлем себе (о других игроках , монстрах и объектах)
-		$return['enemys'] = $this->model->get('enemys', ['map_id'=>$this->model->player['map_id']]);	
+		$return['enemys'] = $this->get('enemys', ['map_id'=>$this->player['map_id']]);	
 		
 		// объекты из бд
-		$return['objects'] = $this->model->get('objects', ['map_id'=>$this->model->player['map_id']]);
+		$return['objects'] = $this->get('objects', ['map_id'=>$this->player['map_id']]);
 				
 		// добавим себя на на карту
-		if($self = end($this->model->get('players', ['id'=>$this->model->player['id']])))
+		if($self = end($this->get('players', ['id'=>$this->player['id']])))
 		{	
-			if(!$this->model::redis()->geoAdd('map:'.$this->model->player['map_id'], $self['position'][0], $self['position'][1], $self['token']))
+			if(!static::redis()->geoAdd('map:'.$this->player['map_id'], $self['position'][0], $self['position'][1], $self['token']))
 				throw new \Exception('Ошибка добавления на карту');	
 			
 			// добавим всем на карту себя (себе тоже)
-			$this->model::redis()->publish('map:'.$this->model->player['map_id'], json_encode(['players'=>[ $self ]],JSON_NUMERIC_CHECK));			
+			static::redis()->publish('map:'.$this->player['map_id'], json_encode(['players'=>[ $self ]],JSON_NUMERIC_CHECK));			
 		}
 		else
 			throw new \Exception('не найден игрок');
 		
 	 	ob_start(); 
-			imagepng((new \Edisom\App\map\model\Tiled\GD\Map($this->model->player['map_id']))->load()->resource);
+			imagepng((new Map($this->player['map_id']))->load()->resource);
 			$return['map']['data'] = base64_encode(ob_get_contents());
 		ob_end_clean (); 
 		
 		if($return)
-			$this->model::redis()->publish('token:'.$this->token, json_encode(array_filter($return), JSON_NUMERIC_CHECK));
+			static::redis()->publish('token:'.$this->player['token'], json_encode(array_filter($return), JSON_NUMERIC_CHECK));
 	}	
 	
 	public function save()
 	{	
-		if($data = $this->model->player)
+		if($data = $this->player)
 		{
-			if($position = $this->model::redis()->geoPos('map:'.$this->model->player['map_id'], $this->token)[0]){
+			if($position = static::redis()->geoPos('map:'.$this->player['map_id'], $this->player['token'])[0]){
 				$data['position_x'] = round($position[0], 2);
 				$data['position_y'] = round($position[1], 2);
 			}
-			$this->model->update('players', $this->model->player['id'], $data);	
+			$this->update('players', $this->player['id'], $data);	
 		}		
-	}	
+	}
 }

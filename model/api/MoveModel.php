@@ -1,7 +1,8 @@
 <?php
-namespace Edisom\App\game\controller;
+namespace Edisom\App\game\model\api;
+//use JMGQ\AStar\DomainLogicInterface;
 
-class MoveController extends ApiController
+class MoveModel extends ApiModel
 {	
 	private $position;
 	
