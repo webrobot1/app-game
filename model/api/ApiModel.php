@@ -44,7 +44,7 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		if($tokens = static::redis()->zRange('map:'.$this->player['map_id'], 0, -1))
 		{
 			if(!$return['players'] = $this->get('players', ['token'=>$tokens]))
-				throw new \Exception('не найдено игроков по токенам '.print_r($tokens, true));
+				throw new \Exception('не найдено игроков на карте '.$this->player['map_id'].' по токенам '.print_r($tokens, true));
 				
 			// удалим данные что передавать клиентам не нужно
 			foreach($return['players'] as &$player){
