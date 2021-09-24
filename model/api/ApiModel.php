@@ -1,11 +1,10 @@
 <?php
-namespace Edisom\App\game\model;
+namespace Edisom\App\game\model\api;
 
-use api\ApiModel;
 use \Edisom\App\map\model\Tiled\GD\Map;
 use \Edisom\Core\Cli;
 
-class ApiModel extends BackendModel
+class ApiModel extends Edisom\App\game\model\BackendModel
 {	
 	protected $player;
 			
