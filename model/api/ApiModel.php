@@ -15,6 +15,8 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		
 		global $argv;
 		
+		parent::__construct();
+		
 		$argv[2] = Cli::decode($argv[2]);
 		
 		if(!$argv[2]['token'])
@@ -26,6 +28,15 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		static::log('Пришла команда '.$argv[1]['action'].' от '.$argv[2]['token']);					
 	}
 
+	// переопределим исключения, нам заголовки не нужны а текст не выводим а отправляем по подписке
+	// пусть клиентское приложение решает что с этим делать (рвать коннект или просто выводить ошибку)
+	public function exceptionHandler($ex)
+	{
+		if($this->player['token'])
+			static::redis()->publish('token:'.$this->player['token'], json_encode(['error'=>$ex->getMessage()]));
+		
+		parent::exceptionHandler($ex);
+	}
 
 	public function load()
 	{	
