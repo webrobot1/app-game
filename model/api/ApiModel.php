@@ -70,10 +70,10 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		else
 			throw new \Exception('не найден игрок');
 		
-	 	//ob_start(); 
-		//	imagepng((new Map($this->player['map_id']))->load()->resource);
-		//	$return['map']['data'] = base64_encode(ob_get_contents());
-		//ob_end_clean (); 
+	 	ob_start(); 
+			imagepng((new Map($this->player['map_id']))->load()->resource);
+			$return['map']['data'] = base64_encode(ob_get_contents());
+		ob_end_clean (); 
 		
 		if($return && ($return = json_encode(array_filter($return), JSON_NUMERIC_CHECK)))
 		{
