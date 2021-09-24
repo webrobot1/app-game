@@ -14,7 +14,7 @@ class SigninController extends \Edisom\Core\Controller
 	
 	public function signin()
 	{
-		return $this->model->signin($this->login, $this->password);
+		exit($this->model->signin($this->login, $this->password));
 	}	
 	
 	public function register()
