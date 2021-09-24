@@ -21,9 +21,12 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		
 		if(!$argv[2]['token'])
 			throw new \Exception('отсутствует токен');	
-		// сразу соберем из редиса данные об игроке воедино (те что мы записали в SigninController строка 32)
+		// сразу соберем из редиса данные об игроке воедино (те что мы записали в SiginModel строка 36)
 		elseif(!$this->player = static::redis()->hGetAll($argv[2]['token']))
 			throw new \Exception('Ошибка авторизации');
+
+		// этой информации нет в редисе поэтому добавим тут (или в SiginModel строка 36)
+		$this->player['token'] = $argv[2]['token'];
 
 		static::log('Пришла команда '.$argv[1]['action'].' от '.$argv[2]['token']);					
 	}
