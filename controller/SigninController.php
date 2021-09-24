@@ -19,7 +19,7 @@ class SigninController extends \Edisom\Core\Controller
 	
 	public function register()
 	{
-		$this->model->register($this->login, $this->password)
+		$this->model->register($this->login, $this->password);
 		exit('Успешно зарегистрирован');
 	}
 	
