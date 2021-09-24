@@ -28,7 +28,7 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		// этой информации нет в редисе поэтому добавим тут (или в SiginModel строка 36)
 		$this->player['token'] = $argv[2]['token'];
 
-		static::log('Пришла команда '.$argv[1]['action'].' от '.$argv[2]['token'].' ('.microtime(true) - START_TIME_CHECK['microtime'].')');					
+		static::log('Пришла команда '.$argv[1]['action'].' от '.$argv[2]['token']);					
 	}
 
 	// переопределим исключения, нам заголовки не нужны а текст не выводим а отправляем по подписке
