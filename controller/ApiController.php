@@ -1,7 +1,7 @@
 <?php
 namespace Edisom\App\game\controller;
 
-class ApiController extends \Edisom\Core\Api
+class ApiController extends \Edisom\Core\Controller
 {	
 	protected function __construct()
 	{
@@ -18,6 +18,16 @@ class ApiController extends \Edisom\Core\Api
 		elseif(!$this->model->player = $this->model::redis()->hGetAll($this->token))
 			throw new \Exception('Ошибка авторизации');	
 	}	
+	
+	// переопределим исключения, нам заголовки не нужны а текст не выводим а отправляем по подписке
+	// пусть клиентское приложение решает что с этим делать (рвать коннект или просто выводить)
+	public function controllerExceptionHandler($ex)
+	{
+		if($this->token)
+			static::redis()->publish('token:'.$this->token, json_encode(['error'=>$ex->getMessage()]));
+		
+		$this->model->exceptionHandler($ex);
+	}
 	
 	public function load()
 	{	
@@ -36,11 +46,10 @@ class ApiController extends \Edisom\Core\Api
 		}
 				
 		// данные что мы вышлем себе (о других игроках , монстрах и объектах)
-		if($enemys = $this->model->get('enemys', ['map_id'=>$this->model->player['map_id']])){
-			$return['enemys'] = $enemys;	
-		}
-		if($objects = $this->model->get('objects', ['map_id'=>$this->model->player['map_id']]))
-			$return['objects'] = $objects;
+		$return['enemys'] = $this->model->get('enemys', ['map_id'=>$this->model->player['map_id']]);	
+		
+		// объекты из бд
+		$return['objects'] = $this->model->get('objects', ['map_id'=>$this->model->player['map_id']]);
 				
 		// добавим себя на на карту
 		if($self = end($this->model->get('players', ['id'=>$this->model->player['id']])))
@@ -60,7 +69,7 @@ class ApiController extends \Edisom\Core\Api
 		ob_end_clean (); 
 		
 		if($return)
-			exit(json_encode($return, JSON_NUMERIC_CHECK));
+			$this->model::redis()->publish('token:'.$this->token, json_encode(array_filter($return), JSON_NUMERIC_CHECK));
 	}	
 	
 	public function save()
