@@ -6,10 +6,10 @@ class MoveModel extends ApiModel
 {	
 	private $position;
 	
-	protected function __construct()
+	protected function __construct(string $token)
 	{
-		parent::__construct();
-		$this->position = static::redis()->geoPos('map:'.$this->player['map_id'], $this->player['token'])[0];
+		parent::__construct($token);
+		$this->position = static::redis()->geoPos('map:'.$this->player['map_id'], $this->token)[0];
 		
 		if(\Edisom\App\server\model\ServerModel::PROTOCOL == 'Udp')
 			DEFINE("SPEED", 0.1);
@@ -20,13 +20,12 @@ class MoveModel extends ApiModel
 	function __destruct()
 	{
 		// установим нвоые координаты игроку
-		static::redis()->geoAdd('map:'.$this->player['map_id'], $this->position[0], $this->position[1], $this->player['token']);
+		static::redis()->geoAdd('map:'.$this->player['map_id'], $this->position[0], $this->position[1], $this->token);
 		
 		// сообщим всем на карте что мы двинулись
 		static::redis()->publish('map:'.$this->player['map_id'], json_encode(['players'=>[['id'=>$this->player['id'], 'action'=>$this->player['action'], 'position'=>$this->position]]],JSON_NUMERIC_CHECK));	
 
-		static::log('Движение игрока '.$this->player['token']);		
-		exit();
+		static::log('Движение игрока '.$this->token);		
 	}
 	
 	
