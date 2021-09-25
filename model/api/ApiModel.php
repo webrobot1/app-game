@@ -8,35 +8,23 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 {	
 	protected $player;
 			
-	protected function __construct()
+	protected function __construct(public string $token)
 	{
-		if (PHP_SAPI !== 'cli') 
-			throw new \Exception('Только CLI режим');
-		
-		global $argv;
-		
 		parent::__construct();
 		
-		$argv[2] = Cli::decode($argv[2]);
-		
-		if(!$argv[2]['token'])
-			throw new \Exception('отсутствует токен');	
 		// сразу соберем из редиса данные об игроке воедино (те что мы записали в SiginModel строка 36)
-		elseif(!$this->player = static::redis()->hGetAll($argv[2]['token']))
+		if(!$this->player = static::redis()->hGetAll($this->token))
 			throw new \Exception('Ошибка авторизации');
 
-		// этой информации нет в редисе поэтому добавим тут (или в SiginModel строка 36)
-		$this->player['token'] = $argv[2]['token'];
-
-		static::log('Пришла команда '.$argv[1]['action'].' от '.$argv[2]['token']);					
+		static::log('Пришла команда от '.$this->token);					
 	}
 
 	// переопределим исключения, нам заголовки не нужны а текст не выводим а отправляем по подписке
 	// пусть клиентское приложение решает что с этим делать (рвать коннект или просто выводить ошибку)
 	public function exceptionHandler($ex)
 	{
-		if($this->player['token'])
-			static::redis()->publish('token:'.$this->player['token'], json_encode(['error'=>$ex->getMessage()]));
+		if($this->token)
+			static::redis()->publish('token:'.$this->token, json_encode(['error'=>$ex->getMessage()]));
 		
 		parent::exceptionHandler($ex);
 	}
@@ -64,13 +52,13 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		$return['objects'] = $this->get('objects', ['map_id'=>$this->player['map_id']]);
 				
 		// добавим себя на на карту
-		if($self = end($this->get('players', ['id'=>$this->player['id']])))
+		if($player = end($this->get('players', ['id'=>$this->player['id']])))
 		{	
-			if(!static::redis()->geoAdd('map:'.$this->player['map_id'], $self['position'][0], $self['position'][1], $self['token']))
+			if(!static::redis()->geoAdd('map:'.$this->player['map_id'], $player['position'][0], $player['position'][1], $player['token']))
 				throw new \Exception('Ошибка добавления на карту');	
 			
 			// добавим всем на карту себя (себе тоже)
-			static::redis()->publish('map:'.$this->player['map_id'], json_encode(['players'=>[ $self ]],JSON_NUMERIC_CHECK));			
+			static::redis()->publish('map:'.$this->player['map_id'], json_encode(['players'=>[ $player ]],JSON_NUMERIC_CHECK));			
 		}
 		else
 			throw new \Exception('не найден игрок');
@@ -82,8 +70,8 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		
 		if($return && ($return = json_encode(array_filter($return), JSON_NUMERIC_CHECK)))
 		{
-			static::log('отправляем карту для '.$this->player['token'].' '.$return);
-			static::redis()->publish('token:'.$this->player['token'], $return);
+			static::log('отправляем карту для '.$this->token.' '.$return);
+			static::redis()->publish('token:'.$this->token, $return);
 			static::log('карта отправлена');
 		}
 	}	
@@ -92,7 +80,7 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 	{	
 		if($data = $this->player)
 		{
-			if($position = static::redis()->geoPos('map:'.$this->player['map_id'], $this->player['token'])[0]){
+			if($position = static::redis()->geoPos('map:'.$this->player['map_id'], $this->token)[0]){
 				$data['position_x'] = round($position[0], 2);
 				$data['position_y'] = round($position[1], 2);
 			}
