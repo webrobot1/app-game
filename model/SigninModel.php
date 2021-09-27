@@ -49,7 +49,7 @@ class SigninModel extends BackendModel
 		{
 			if($player_id = static::redis()->hGet($token, 'id'))
 			{
-				static::upload($_FILES['screen']['tmp_name'] , $player_id.'.png', true);
+				static::upload($_FILES['screen']['tmp_name'] , $player_id.'.png', null, true);
 			}
 			else
 				throw new \Exception('не найден игрок с токеном: '.$token);				
