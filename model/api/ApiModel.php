@@ -1,8 +1,6 @@
 <?php
 namespace Edisom\App\game\model\api;
-
 use \Edisom\App\map\model\Tiled\GD\Map;
-use \Edisom\Core\Cli;
 
 class ApiModel extends \Edisom\App\game\model\BackendModel
 {	
@@ -17,16 +15,6 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 			throw new \Exception('Ошибка авторизации');
 
 		static::log('Пришла команда от '.$this->token);					
-	}
-
-	// переопределим исключения, нам заголовки не нужны а текст не выводим а отправляем по подписке
-	// пусть клиентское приложение решает что с этим делать (рвать коннект или просто выводить ошибку)
-	public function exceptionHandler($ex)
-	{
-		if($this->token)
-			static::redis()->publish('token:'.$this->token, json_encode(['error'=>$ex->getMessage()]));
-		
-		parent::exceptionHandler($ex);
 	}
 
 	public function load()
