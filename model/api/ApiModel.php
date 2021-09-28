@@ -52,13 +52,13 @@ class ApiModel extends \Edisom\App\game\model\BackendModel
 		$return['objects'] = $this->get('objects', ['map_id'=>$this->player['map_id']]);
 				
 		// добавим себя на на карту
-		if($player = end($this->get('players', ['id'=>$this->player['id']])))
+		if($self = end($this->get('players', ['id'=>$this->player['id']])))
 		{	
-			if(!static::redis()->geoAdd('map:'.$this->player['map_id'], $player['position'][0], $player['position'][1], $player['token']))
+			if(!static::redis()->geoAdd('map:'.$this->player['map_id'], $self['position'][0], $self['position'][1], $self['token']))
 				throw new \Exception('Ошибка добавления на карту');	
 			
 			// добавим всем на карту себя (себе тоже)
-			static::redis()->publish('map:'.$this->player['map_id'], json_encode(['players'=>[ $player ]],JSON_NUMERIC_CHECK));			
+			static::redis()->publish('map:'.$this->player['map_id'], json_encode(['players'=>[ $self ]],JSON_NUMERIC_CHECK));			
 		}
 		else
 			throw new \Exception('не найден игрок');
